@@ -1,6 +1,6 @@
 <?php
 
-function getVideoUrl(string $url, string $referrer = 'https://reddit.com/'): array
+function getVideoTitleUrl(string $url = "https://streamable.com/moo", string $referrer = 'https://reddit.com/'): array
 {
     $crl = curl_init();
     curl_setopt($crl, CURLOPT_URL, $url);
@@ -47,8 +47,7 @@ function getVideoUrl(string $url, string $referrer = 'https://reddit.com/'): arr
         }
 
         if (!isset($video_url) && isset($doc->getElementsByTagName('video')[0])) {
-            $dl_link = $doc->getElementsByTagName('video')[0]->getAttribute('src');
-            $video_url = str_replace("//", "https://", $dl_link);
+            $video_url = str_replace("//", "https://", $doc->getElementsByTagName('video')[0]->getAttribute('src'));
         }
 
         $xpath = new DOMXPath($doc);
@@ -67,6 +66,7 @@ function getVideoUrl(string $url, string $referrer = 'https://reddit.com/'): arr
     return ['success' => false, 'message' => 'HTTP ' . $http_code, 'url' => $url, 'http_code' => $http_code];
 }
 
-$url = "https://streamable.com/bcvehd";
-$html = getVideoUrl($url);
-echo json_encode($html);
+
+$result = getVideoTitleUrl("https://streamable.com/moo");
+
+echo json_encode($result);
